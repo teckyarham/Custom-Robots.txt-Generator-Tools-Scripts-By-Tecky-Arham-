@@ -1,0 +1,133 @@
+<style>    
+    .button { padding:10px 15px; background: var(--linkB); margin-right: 10px}    
+    textarea { width: 95%; height: 200px; margin-bottom: 10px; background: var(--bodyB); border-radius: 5px; padding:10px }    
+    button { padding: 5px 10px; margin-right: 10px; }    
+    .notification {    
+      position: fixed;    
+      bottom: 20px;    
+      left: 50%;    
+      transform: translateX(-50%);    
+      background-color: #4CAF50;    
+      color: white;    
+      padding: 10px 15px;    
+      border-radius: 5px;    
+      z-index: 1000;    
+      opacity: 0;    
+      transition: opacity 0.5s ease-in-out;    
+    }    
+    .notification.show {    
+      opacity: 1;    
+    }    
+    input {    
+      width: 95%;    
+      padding: 10px;    
+      margin-bottom: 10px;    
+      background: var(--bodyB);    
+      border-radius: 5px;    
+      border: 1px solid #ccc;    
+    }    
+    label {    
+      display: block;    
+      margin-bottom: 5px;    
+    }    
+  </style>    
+    
+  <p> ➤ Enter your website URL to generate a robots.txt file. Ensure the URL starts with <b>http://</b> or <b>https://</b>.</p>    
+    
+  <div>Enter your website URL:</div>    
+  <input type="text" id="websiteUrl" placeholder="https://www.example.com">    
+    
+  <button class="button" onclick="generateRobotsTxt()">Generate</button>    
+  <button class="button" onclick="resetRobotsTxt()">Clear</button>    
+    
+  <div>Generated robots.txt:</div>    
+  <textarea id="outputRobotsTxt" readonly></textarea>    
+    
+  <button id="copyRobotsButton" class="button" onclick="copyRobotsToClipboard()" disabled>Copy</button>    
+  <button id="downloadRobotsButton" class="button" onclick="downloadRobotsTxt()" disabled>Download</button>    
+    
+  <div id="robotsNotification" class="notification">Copied to clipboard!</div>    
+    
+  <script>    
+    const copyRobotsButton = document.getElementById('copyRobotsButton');    
+    const downloadRobotsButton = document.getElementById('downloadRobotsButton');    
+    const robotsNotification = document.getElementById('robotsNotification');    
+    
+    function enableRobotsButtons() {    
+      copyRobotsButton.disabled = false;    
+      downloadRobotsButton.disabled = false;    
+    }    
+    
+    function disableRobotsButtons() {    
+      copyRobotsButton.disabled = true;    
+      downloadRobotsButton.disabled = true;    
+    }    
+    
+    function generateRobotsTxt() {    
+      const websiteUrl = document.getElementById('websiteUrl').value.trim();    
+      
+      // Extract domain and protocol for sitemap
+      let domain = websiteUrl;
+      if (domain.endsWith('/')) {
+        domain = domain.slice(0, -1);
+      }
+      
+      // Basic template
+      let robotsTxt = `# all user agents\nUser-agent: *\n\n`;
+      
+      // Add standard disallow rules
+      robotsTxt += `# exclude pagination and query pages\n`;
+      robotsTxt += `Disallow: /search*updated-max=*\n`;
+      robotsTxt += `Disallow: /search*max-results=*\n`;
+      robotsTxt += `Disallow: /search*q=*\n\n`;
+      
+      // Add allow rule
+      robotsTxt += `# include everything else\nAllow: /\n\n`;
+      
+      // Add sitemaps if URL is provided
+      if (websiteUrl) {
+        robotsTxt += `# sitemaps\n`;
+        robotsTxt += `Sitemap: ${domain}/sitemap.xml\n`;
+        robotsTxt += `Sitemap: ${domain}/sitemap-pages.xml\n`;
+      }
+      
+      document.getElementById('outputRobotsTxt').value = robotsTxt;    
+      enableRobotsButtons();    
+    }    
+    
+    function resetRobotsTxt() {    
+      document.getElementById('websiteUrl').value = '';    
+      document.getElementById('outputRobotsTxt').value = '';    
+      disableRobotsButtons();    
+    }    
+    
+    function copyRobotsToClipboard() {    
+      const outputRobotsTxt = document.getElementById('outputRobotsTxt');    
+      outputRobotsTxt.select();    
+      document.execCommand('copy');    
+      showRobotsNotification();    
+    }    
+    
+    function downloadRobotsTxt() {    
+      const outputRobotsTxt = document.getElementById('outputRobotsTxt').value;    
+      const blob = new Blob([outputRobotsTxt], { type: 'text/plain' });    
+      const url = URL.createObjectURL(blob);    
+      const a = document.createElement('a');    
+      a.href = url;    
+      a.download = 'robots.txt';    
+      document.body.appendChild(a);    
+      a.click();    
+      document.body.removeChild(a);    
+      URL.revokeObjectURL(url);    
+    }    
+    
+    function showRobotsNotification() {    
+      robotsNotification.classList.add('show');    
+      setTimeout(() => {    
+        robotsNotification.classList.remove('show');    
+      }, 3000);    
+    }    
+    
+    // Disable buttons on initial load    
+    disableRobotsButtons();    
+</script>
