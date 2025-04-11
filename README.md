@@ -16,4 +16,4 @@ A simple web-based tool to generate `robots.txt` files for your website. Just en
 
 ## Live Demo
 
-*Coming Soon or host it on GitHub Pages!*
+[https://teckyarhams.blogspot.com/p/free-custom-robotstxt-generator.html](https://teckyarhams.blogspot.com/p/free-custom-robotstxt-generator.html)
