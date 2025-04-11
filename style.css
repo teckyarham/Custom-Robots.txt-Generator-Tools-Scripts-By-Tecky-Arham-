@@ -1,0 +1,51 @@
+.button {
+  padding: 10px 15px;
+  background: var(--linkB);
+  margin-right: 10px;
+}
+
+textarea {
+  width: 95%;
+  height: 200px;
+  margin-bottom: 10px;
+  background: var(--bodyB);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  margin-right: 10px;
+}
+
+.notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.notification.show {
+  opacity: 1;
+}
+
+input {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: var(--bodyB);
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
